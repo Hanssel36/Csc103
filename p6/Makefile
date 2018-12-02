@@ -1,4 +1,4 @@
-SOURCES := $(wildcard *.cpp)
+SOURCES := $(filter-out %-skel.cpp,$(wildcard *.cpp))
 OBJECTS := $(SOURCES:.cpp=.o)
 HEADERS := $(wildcard *.h)
 
