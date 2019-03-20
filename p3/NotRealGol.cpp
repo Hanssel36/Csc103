@@ -10,7 +10,7 @@
  *
  *
  * Finally, please indicate approximately how many hours you spent on this:
- * #hours:15
+ * #hours:
  */
 #include <iostream>
 #include <cstdio>
@@ -22,7 +22,7 @@ using std::vector;
 #include <string>
 using std::string;
 using std::cout;
-
+using std::endl;
 static const char* usage =
 "Usage: %s [OPTIONS]...\n"
 "Text-based version of Conway's game of life.\n\n"
@@ -42,22 +42,18 @@ string initfilename = "/tmp/gol-world-current"; /* read initial state from here.
 #define WARMUP 1
 
 #ifdef WARMUP
-vector<vector<bool> > world;
-//#include "res/bglider-small"
-
+vector<vector<bool> > world = {
+#include "res/bglider-small"
+};
 #endif
-vector<vector<bool> > OW;
-
 
 /* NOTE: you don't have to write these functions -- this is just how
  * I chose to organize my code. */
-int function(int& count, int x, int y);
 size_t nbrCount(size_t i, size_t j, const vector<vector<bool> >& g);
 void update();
 int initFromFile(const string& fname); /* read initial state into vectors. */
 void mainLoop();
 void dumpState(FILE* f);
-
 
 /* NOTE: you can use a *boolean* as an index into the following array
  * to translate from bool to the right characters: */
@@ -65,14 +61,37 @@ char text[3] = ".O";
 
 int main(int argc, char *argv[]) {
 	// define long options
-	int counter = 0;
-		static struct option long_opts[] = {
+	for(int i = 0; i < 10; i++){
+		for(int j = 0; j < 25; j++){
+			if(world[i][j] < 3){
+			world[i+1][j] = false;
+			world[i][] = false;
+
+			}
+			if(world)[i][j] < 2){
+				world[i+1][j] = false;
+
+
+				}
+			if(world[i][j] == 3){
+
+				world[i+1][j] = true;
+				}
+				cout << world[i][j];
+		}
+
+		cout << endl;
+			}
+
+
+	static struct option long_opts[] = {
 		{"seed",    required_argument, 0, 's'},
 		{"world",   required_argument, 0, 'w'},
 		{"fast-fw", required_argument, 0, 'f'},
 		{"help",    no_argument,       0, 'h'},
 		{0,0,0,0}
 	};
+	// process options:
 	char c;
 	int opt_index = 0;
 	while ((c = getopt_long(argc, argv, "hs:w:f:", long_opts, &opt_index)) != -1) {
@@ -93,132 +112,16 @@ int main(int argc, char *argv[]) {
 				printf(usage,argv[0]);
 				return 1;
 		}
-FILE* f = fopen(initfilename.c_str(),"rb");
-if (!f) {
-    exit(1);
-}
-
-fread(&c,1,1,f);
-
-
-world.push_back(vector<bool>()); /* add a new row */
-size_t rows = 0; /* current row we are filling */
-while (fread(&c,1,1,f)) {
-    if (c == '\n') {
-        /* found newline; add a new row */
-        rows++;
-        world.push_back(vector<bool>());
-    } else if (c == '.') {
-        world[rows].push_back(false); /* dead x_x */
-    } else if (c == 'O') {
-        world[rows].push_back(true); /* alive 8D */
-    }
-}
-
-OW = world;
-OW.pop_back();
-	while(max_gen > counter){
-counter++;
-	for(int k = 0; k < 10; k++){
-		for(int j = 0; j < 20; j++){
-			int a = 0;
-
-  if(function(a, k, j) < 2 && world[k][j] == true){
-	 OW[k][j] = false;
-	 }
-	if(function(a, k, j) == 2 && world[k][j] == true){
-		OW[k][j] = true;
-		}
-	 if(function(a, k, j) > 3 && world[k][j] == true){
-		 OW[k][j] = false;
-		 }
-		if(function(a, k, j) == 3 && world[k][j] == true){
-			OW[k][j] = true;
-			}
-	if(function(a, k, j) == 3 && world[k][j] == false){
-
-		OW[k][j] = true;
-		}
-			}
-
-		}
-
-world = OW;
-	// process options:
-
-		}
-
 	}
-
-FILE* f = fopen(wfilename.c_str(),"wb");
-
-char u = '.';
-char t = 'O';
-char n = '\n';
-
-for(int j = 0; j < 10; j++){
-for (int i = 0; i < 20; i++) {
-	if(OW[j][i] == false){
-		fwrite(&u,1,1,f);
-
-		}
-		if(OW[j][i] == true){
-fwrite(&t,1,1,f);
-
-			}
-
-}
- fwrite(&n,1,1,f);
-
-}
-if(wfilename == "-"){
-	for(int j = 0; j < 10; j++){
-for (int i = 0; i < 20; i++) {
-	if(OW[j][i] == false){
-		cout << '.';
-		}
-		if(OW[j][i] == true){
-			cout << 'O';
-			}
-	}
-	cout << "\n";
-}
-}
-}
-/* NOTE: might have some issues with an empty last row.
- * But the fix is pretty easy (just remove it!). */
 
 	/* NOTE: at this point wfilename initfilename and max_gen
 	 * are all set according to the command line. */
 	/* If you wrote the initFromFile function, call it here: */
-	//initFromFile(initfilename);
-	//mainLoop();
-
-
-
-int function(int& count, int x, int y){
-count = 0;
-int row, colum;
-	for(int r = -1; r <= 1; r++){
-		for(int c = -1; c <= 1; c++){
-
-			row = (x+r+10)%10;
-			colum = (y+c+20)%20;
-
-			if(world[row][colum] == true){
-
-					count++;
-			}
-
-		}
-		}
-
-					if(world[x][y] == true){
-
-					count--;
-					}
-return count;
+	// initFromFile(initfilename);
+	mainLoop();
+	return 0;
 }
+
 void mainLoop() {
 	/* TODO: write this */
 	/* update, write, sleep */

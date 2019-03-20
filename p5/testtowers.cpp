@@ -7,10 +7,10 @@
  * NOT mean it is okay to COPY THAT SOURCE.  What you submit here **MUST BE
  * YOUR OWN WORK**.
  * References:
- *https://www.khanacademy.org/computing/computer-science/algorithms/towers-of-hanoi/a/towers-of-hanoi
+ *
  *
  * Finally, please indicate approximately how many hours you spent on this:
- * #hours: 4
+ * #hours:
  */
 
 // TODO: write the program.

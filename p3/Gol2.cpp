@@ -10,7 +10,7 @@
  *
  *
  * Finally, please indicate approximately how many hours you spent on this:
- * #hours:15
+ * #hours:13
  */
 #include <iostream>
 #include <cstdio>
@@ -42,13 +42,13 @@ string initfilename = "/tmp/gol-world-current"; /* read initial state from here.
 #define WARMUP 1
 
 #ifdef WARMUP
-vector<vector<bool> > world;
+vector<vector<bool> > world = {}
 //#include "res/bglider-small"
-
+;
 #endif
-vector<vector<bool> > OW;
-
-
+vector<vector<bool> > OW = {
+//#include "res/bglider-small"
+};
 /* NOTE: you don't have to write these functions -- this is just how
  * I chose to organize my code. */
 int function(int& count, int x, int y);
@@ -114,15 +114,18 @@ while (fread(&c,1,1,f)) {
         world[rows].push_back(true); /* alive 8D */
     }
 }
-
 OW = world;
-OW.pop_back();
-	while(max_gen > counter){
-counter++;
+for(int k = 0; k < 10; k++){
+		for(int j = 0; j < 20; j++){
+			cout << world[k][j];
+		}
+		cout << "\n";
+	}
+	while(max_gen < counter){
+		counter++;
 	for(int k = 0; k < 10; k++){
 		for(int j = 0; j < 20; j++){
 			int a = 0;
-
   if(function(a, k, j) < 2 && world[k][j] == true){
 	 OW[k][j] = false;
 	 }
@@ -143,47 +146,11 @@ counter++;
 
 		}
 
-world = OW;
+
 	// process options:
 
 		}
-
 	}
-
-FILE* f = fopen(wfilename.c_str(),"wb");
-
-char u = '.';
-char t = 'O';
-char n = '\n';
-
-for(int j = 0; j < 10; j++){
-for (int i = 0; i < 20; i++) {
-	if(OW[j][i] == false){
-		fwrite(&u,1,1,f);
-
-		}
-		if(OW[j][i] == true){
-fwrite(&t,1,1,f);
-
-			}
-
-}
- fwrite(&n,1,1,f);
-
-}
-if(wfilename == "-"){
-	for(int j = 0; j < 10; j++){
-for (int i = 0; i < 20; i++) {
-	if(OW[j][i] == false){
-		cout << '.';
-		}
-		if(OW[j][i] == true){
-			cout << 'O';
-			}
-	}
-	cout << "\n";
-}
-}
 }
 /* NOTE: might have some issues with an empty last row.
  * But the fix is pretty easy (just remove it!). */
@@ -204,6 +171,8 @@ int row, colum;
 
 			row = (x+r+10)%10;
 			colum = (y+c+20)%20;
+
+
 
 			if(world[row][colum] == true){
 
